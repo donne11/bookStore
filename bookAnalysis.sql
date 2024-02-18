@@ -1,17 +1,4 @@
--- HW4: Books that will change your life
--- Instructions: Run the script "hw4_library_setup.sql" in a ROOT connection
--- This will create a new schema called "library"
--- Write a query that answers each question below.
--- Save this file as HW4_YourFullName.sql and submit
-
--- Questions 1-12 are 8 points each. Question 13 is worth 4 points.
-
-
-
-
-
 use library;
-
 
 
 -- 1. Which book(s) are Science Fiction books written in the 1960's?
@@ -19,9 +6,6 @@ use library;
 SELECT title, author, year 
 FROM book
 WHERE genre_id = 4 AND year BETWEEN 1960 AND 1969;
-
-
-
 
 
 -- 2. Which users have borrowed no books?
@@ -36,18 +20,11 @@ FROM user
 WHERE user_id NOT IN (SELECT user_id FROM borrow);
 
 
-
-
 -- Method using a join (4 points)
 SELECT user.user_name, user.city
 FROM user
 LEFT JOIN borrow ON user.user_id = borrow.user_id
 WHERE borrow.user_id IS NULL;
-
-
-
-
-
 
 
 -- 3. How many books were borrowed by each user in each month?
@@ -62,9 +39,6 @@ GROUP BY user_name, month
 ORDER BY user_name, month;
 
 
-
-
-
 -- 4. How many times was each book checked out?
 -- Output the book's title, genre name, and the number of times it was checked out, and whether the book is still in circulation
 -- Include books never borrowed
@@ -75,11 +49,6 @@ LEFT JOIN borrow ON book.book_id = borrow.book_id
 LEFT JOIN genre ON book.genre_id = genre.genre_id
 GROUP BY book.book_id, title, genre_name, in_circulation
 ORDER BY num_checked_out DESC;
-
-
-
-
-
 
 
 -- 5. How many times did each user return a book late?
@@ -96,10 +65,6 @@ GROUP BY user.user_name
 ORDER BY num_late_returns DESC;
 
 
-
-
-
-
 -- 6. How many books of each genre where published after 1950?
 -- Include genres that are not represented by any book in our catalog
 -- as well as genres for which there are books but none published after 1950.
@@ -109,9 +74,6 @@ FROM genre g
 LEFT JOIN book b ON g.genre_id = b.genre_id AND b.year >= 1951
 GROUP BY g.genre_name
 ORDER BY num_books DESC;
-
-
-
 
 
 -- 7. For each genre, compute a) the number of books borrowed and b) the average
@@ -132,9 +94,6 @@ GROUP BY g.genre_name
 ORDER BY avg_days_borrowed DESC;
 
 
-
-
-
 -- 8. List all pairs of books published within 10 years of each other
 -- Don't include the book with itself
 -- Only list (X,Y) pairs where X was published earlier
@@ -149,8 +108,6 @@ WHERE ABS(b.year - bb.year) < 11
 ORDER BY years_published_apart;
 
 
-
-
 -- 9. Assuming books are returned completely read,
 -- Rank the users from fastest to slowest readers (pages per day)
 -- include users that borrowed no books (report reading rate as 0.0)
@@ -162,8 +119,6 @@ LEFT JOIN borrow ON u.user_id = borrow.user_id
 LEFT JOIN book b ON borrow.book_id = b.book_id
 GROUP BY u.user_name
 ORDER BY read_time DESC;
-
-
 
 
 -- 10. How many books of each genre were checked out by John?
@@ -182,9 +137,6 @@ HAVING COUNT(b.book_id) > 1
 ORDER BY num_books_checked_out DESC;
 
 
-
-
-
 -- 11. On average how many books are borrowed per user?
 -- Output two averages in one row: one average that includes users that
 -- borrowed no books, and one average that excludes users that borrowed no books
@@ -196,11 +148,6 @@ FROM (
   FROM borrow
   GROUP BY user_id
 ) AS borrow_counts;
-
-
-
-
-
 
 
 -- 12. How much does each user owe the library. Include users owing nothing
@@ -216,9 +163,6 @@ FROM user u
 LEFT JOIN borrow ON u.user_id = borrow.user_id
 LEFT JOIN payment ON u.user_id = payment.user_id
 GROUP BY u.user_name;
-
-
-
 
 
 -- 13. (4 points) Which books will change your life?
